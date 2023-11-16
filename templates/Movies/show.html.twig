@@ -1,0 +1,77 @@
+{% extends "./base.html.twig" %}
+
+{% block body %}
+
+    {% if (app.user) and (is_granted('ROLE_ADMIN')) %}
+    <div class="mx-auto w-4/5 my-8">
+        <a 
+            href="/movies/edit/{{ movie.id }}" 
+            class="uppercase border border-gray-500 text-lg py-4 px-6 rounded transition transition-all bg-gray-800 text-white hover:bg-white hover:text-gray-800">
+            Edit the movie
+        </a>
+         <a 
+            href="/movies/delete/{{ movie.id }}" 
+            class=" ml-5 uppercase border border-gray-500 text-lg py-4 px-6 rounded transition transition-all bg-red-800 text-white hover:bg-white hover:text-gray-800">
+            Remove the movie
+        </a>
+    </div>
+    {% endif %}
+    <div class="sm:w-3/5 w-4/5 mx-auto">
+        <h1 class="pt-20 sm:text-5xl md:text-7xl text-4xl font-bold text-center">
+            {{ movie.title }} 
+            
+        </h1>
+        <p class="text-center">category:
+        {{movie.category.title}}
+                        
+        </p>
+        <div class="py-10 text-center">
+            <div class="inline-block sm:pt-1">
+            
+                <h2 class="font-bold">
+               Actors: {% for actor in movie.actors %}
+                     {{actor.name}}-
+                   {% endfor %} 
+                </h2>
+
+                <p class="text-sm text-gray-600">
+                    28-01-2022 4 min. read
+                </p>
+            </div>
+        </div>
+
+        <img
+            src="{{ movie.imagePath }}"
+            class="rounded-xl w-full shadow-xl"
+            alt="Icon of Code With Dary"
+        />
+
+        <p class="text-xl py-6">
+            {{ movie.description }}
+        </p>
+    </div>
+    <div class="sm:w-3/5 w-4/5 mx-auto">
+    <h3>Commentaires </h3>
+    {% for comment in movie.comments %}
+    <h4 class="text-gray-700 font-bold text-3xl py-2">
+                    {{ comment.author.email }}
+    </h4>
+    <p>
+     {{ comment.content }}
+    </p>
+    {% endfor %}
+    </div>
+
+{% if (app.user) and (is_granted('ROLE_USER')) %}
+    {{ form_start(commentForm) }}
+
+        {{ form_widget(commentForm) }}
+        <button    
+            type="submit"
+            class="uppercase mt-15 bg-blue-500 text-gray-100 text-lg font-extrabold py-4 px-8 rounded-3xl">
+            Submit Comment
+        </button>
+
+    {{ form_end(commentForm) }}
+    {% endif %}
+{% endblock %}
